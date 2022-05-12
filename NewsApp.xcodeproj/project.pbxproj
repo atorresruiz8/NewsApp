@@ -62,7 +62,7 @@
 			children = (
 				8BF0F06F282D501800292399 /* Resources */,
 				8BF0F06D282D4FD400292399 /* Managers */,
-				8BF0F06E282D4FE800292399 /* Controlls */,
+				8BF0F06E282D4FE800292399 /* Controllers */,
 				8BF0F057282D4B9400292399 /* AppDelegate.swift */,
 				8BF0F059282D4B9400292399 /* SceneDelegate.swift */,
 				8BF0F05D282D4B9400292399 /* Main.storyboard */,
@@ -81,12 +81,12 @@
 			path = Managers;
 			sourceTree = "<group>";
 		};
-		8BF0F06E282D4FE800292399 /* Controlls */ = {
+		8BF0F06E282D4FE800292399 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				8BF0F05B282D4B9400292399 /* ViewController.swift */,
 			);
-			path = Controlls;
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		8BF0F06F282D501800292399 /* Resources */ = {
