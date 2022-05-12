@@ -19,6 +19,7 @@ class ViewController: UIViewController {
     
     private var articles = [Article]()
     private var viewModels = [NewsTableViewCellViewModel]()
+    private var searchVC = UISearchController(searchResultsController: nil)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +30,12 @@ class ViewController: UIViewController {
         view.backgroundColor = .systemBackground
         
         fetchTopStories()
+        createSearchBar()
+    }
+    
+    func createSearchBar() {
+        navigationItem.searchController = searchVC
+        searchVC.searchBar.delegate = self
     }
     
     func fetchTopStories() {
@@ -58,7 +65,7 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
+extension ViewController: UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModels.count
     }
@@ -81,5 +88,31 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 150
+    }
+    
+    // Search
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let text = searchBar.text, !text.isEmpty else { return }
+        print(text)
+        
+        APICaller.shared.search(with: text, completion: {[weak self] result in
+            switch result {
+            case .success(let articles):
+                self?.articles = articles
+                self?.viewModels = articles.compactMap({
+                    NewsTableViewCellViewModel(title: $0.title,
+                                               subtitle: $0.description ?? "No Description",
+                                               imageURL: URL(string: $0.urlToImage ?? "")
+                    )
+                })
+                
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                    self?.searchVC.dismiss(animated: true)
+                }
+            case .failure(let error):
+                print(error)
+            }
+        })
     }
 }
